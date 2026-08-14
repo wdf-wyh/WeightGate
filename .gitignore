@@ -1,42 +1,95 @@
-# Secrets & env
+# Secrets & env (keep .env.example)
 .env
 .env.*
 !.env.example
 *.pem
 *.key
+*.ppk
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
 secrets/
 **/credentials*.json
+**/service-account*.json
+
+# Model weights / adapters (never ship in git; data/ also covers tenant trees)
+*.gguf
+*.safetensors
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.npz*
+adapter_model.bin
+adapter_model.safetensors
+pytorch_model*.bin
+model*.safetensors
+*.ggml
+*.q4_0
+*.q4_K
+*.q5_0
+*.q5_K
+*.q8_0
 
 # Python
 __pycache__/
 *.py[cod]
+*$py.class
+*.so
+*.egg
 *.egg-info/
+.eggs/
 .venv/
 venv/
+.env/
+.Python
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
 dist/
 build/
+pip-wheel-metadata/
 
 # Node / frontend (Vue + Vite console)
 node_modules/
 console/dist/
 frontend/dist/
 *.local
+.turbo/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
-# IDE / OS
+# IDE / OS / editor
 .idea/
 .vscode/
 *.swp
+*.swo
+*~
 .DS_Store
 Thumbs.db
+desktop.ini
+.cursor/
 
 # Runtime / tenant data (never commit)
 data/
 *.log
 tmp/
 .cache/
+.huggingface/
+.ollama/
+
+# Local Compose overrides (keep compose/docker-compose.yml tracked)
+compose/docker-compose.override.yml
+docker-compose.override.yml
 
 # Docker volumes leftovers
 postgres-data/
