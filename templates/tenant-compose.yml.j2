@@ -1,0 +1,16 @@
+{# Tenant compose fragment — Phase 0 minimal Jinja2 stub.
+   Rendered by control-plane in Phase 1+; do not apply manually in Phase 0. #}
+services:
+  tenant-{{ tenant_id }}-runtime:
+    image: "{{ runtime_image }}"
+    environment:
+      TENANT_ID: "{{ tenant_id }}"
+      MODEL_PRESET: "{{ model_preset_id }}"
+      AF_DATA_ROOT: "/data/tenants/{{ tenant_id }}"
+    volumes:
+      - "{{ data_root }}/{{ tenant_id }}:/data/tenants/{{ tenant_id }}"
+    # labels used by sleep-watchdog / gateway discovery (Phase 1+)
+    labels:
+      af.tenant_id: "{{ tenant_id }}"
+      af.preset: "{{ model_preset_id }}"
+      af.plane: "data"

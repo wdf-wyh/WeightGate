@@ -1,0 +1,170 @@
+# automatic-funicular — local compose (Phase 3)
+#
+# Profiles:
+#   (default)     postgres + redis
+#   app           control-plane + gateway
+#   ollama        Ollama runtime
+#   open-webui    Open WebUI (optional chat UI against Ollama)
+#   console       Vue admin UI (nginx → control-plane)
+#
+# Usage:
+#   docker compose -f compose/docker-compose.yml up -d postgres redis
+#   docker compose -f compose/docker-compose.yml --profile app --profile ollama up -d --build
+#   docker compose -f compose/docker-compose.yml --profile console up -d --build
+
+name: automatic-funicular
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: af
+      POSTGRES_PASSWORD: af_dev_only
+      POSTGRES_DB: automatic_funicular
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U af -d automatic_funicular"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  control-plane:
+    image: automatic-funicular/control-plane:phase3
+    build:
+      context: ..
+      dockerfile: control-plane/Dockerfile
+    profiles: ["app"]
+    environment:
+      DATABASE_URL: postgresql://af:af_dev_only@postgres:5432/automatic_funicular
+      REDIS_URL: redis://redis:6379/0
+      AF_DATA_ROOT: /data/tenants
+      AF_PORT: "8080"
+      AF_DOCKER_DRIVER: ${AF_DOCKER_DRIVER:-off}
+      AF_CORS_ORIGINS: ${AF_CORS_ORIGINS:-http://127.0.0.1:5173,http://localhost:5173,http://127.0.0.1:4173}
+      AF_API_KEYS: ${AF_API_KEYS:-}
+      AF_INTERNAL_TOKEN: ${AF_INTERNAL_TOKEN:-}
+    volumes:
+      - ../data/tenants:/data/tenants
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  gateway:
+    image: automatic-funicular/gateway:phase3
+    build:
+      context: ..
+      dockerfile: gateway/Dockerfile
+    profiles: ["app"]
+    environment:
+      DATABASE_URL: postgresql://af:af_dev_only@postgres:5432/automatic_funicular
+      REDIS_URL: redis://redis:6379/0
+      CONTROL_PLANE_URL: http://control-plane:8080
+      AF_DATA_ROOT: /data/tenants
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://ollama:11434}
+      VLLM_BASE_URL: ${VLLM_BASE_URL:-http://host.docker.internal:8001}
+      AF_CLOUD_PROVIDER: ${AF_CLOUD_PROVIDER:-openai}
+      AF_CLOUD_BASE_URL: ${AF_CLOUD_BASE_URL:-}
+      AF_CLOUD_API_KEY: ${AF_CLOUD_API_KEY:-}
+      AF_CLOUD_MODEL: ${AF_CLOUD_MODEL:-}
+      AF_CLOUD_NIGHT_START: ${AF_CLOUD_NIGHT_START:-22:00}
+      AF_CLOUD_NIGHT_END: ${AF_CLOUD_NIGHT_END:-08:00}
+      AF_CLOUD_NIGHT_DISCOUNT: ${AF_CLOUD_NIGHT_DISCOUNT:-0.5}
+      AF_CLOUD_NIGHT_TZ: ${AF_CLOUD_NIGHT_TZ:-Asia/Shanghai}
+      AF_ROUTE_DEGRADE: ${AF_ROUTE_DEGRADE:-1}
+      AF_PORT: "8000"
+      AF_API_KEYS: ${AF_API_KEYS:-}
+      AF_INTERNAL_TOKEN: ${AF_INTERNAL_TOKEN:-}
+    volumes:
+      # RW required for Phase 3 /v1/vector/upsert (still tenant-scoped paths only)
+      - ../data/tenants:/data/tenants
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      control-plane:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  console:
+    image: automatic-funicular/console:phase3
+    build:
+      context: ../console
+      dockerfile: Dockerfile
+    profiles: ["console"]
+    ports:
+      - "5173:80"
+    depends_on:
+      control-plane:
+        condition: service_healthy
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama:latest
+    profiles: ["ollama"]
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 12
+      start_period: 20s
+    restart: unless-stopped
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    profiles: ["open-webui"]
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+      WEBUI_AUTH: "false"
+    ports:
+      - "3000:8080"
+    volumes:
+      - open_webui_data:/app/backend/data
+    depends_on:
+      ollama:
+        condition: service_started
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  ollama_data:
+  open_webui_data:

@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://automatic-funicular.dev/schemas/openai-chat-completions.response.json",
+  "title": "OpenAICompatibleChatCompletionsResponse",
+  "description": "Non-streaming /v1/chat/completions response (OpenAI-compatible). Phase 0 contract only.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["id", "object", "created", "model", "choices"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Completion id, e.g. chatcmpl-..."
+    },
+    "object": {
+      "type": "string",
+      "const": "chat.completion"
+    },
+    "created": {
+      "type": "integer",
+      "description": "Unix timestamp (seconds)."
+    },
+    "model": {
+      "type": "string"
+    },
+    "choices": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["index", "message", "finish_reason"],
+        "additionalProperties": true,
+        "properties": {
+          "index": { "type": "integer", "minimum": 0 },
+          "message": {
+            "type": "object",
+            "required": ["role", "content"],
+            "additionalProperties": true,
+            "properties": {
+              "role": { "type": "string", "const": "assistant" },
+              "content": {
+                "type": ["string", "null"]
+              },
+              "tool_calls": {
+                "type": "array",
+                "items": { "type": "object", "additionalProperties": true }
+              }
+            }
+          },
+          "finish_reason": {
+            "type": ["string", "null"],
+            "enum": ["stop", "length", "tool_calls", "content_filter", null]
+          },
+          "logprobs": {
+            "type": ["object", "null"],
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    "usage": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "prompt_tokens": { "type": "integer", "minimum": 0 },
+        "completion_tokens": { "type": "integer", "minimum": 0 },
+        "total_tokens": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "system_fingerprint": {
+      "type": ["string", "null"]
+    }
+  }
+}

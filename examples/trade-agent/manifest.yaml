@@ -1,0 +1,15 @@
+id: trade-agent-v1
+domain: trade
+adapter_slug: trade-v1
+base_preset_hint: qwen2.5-7b-instruct
+prompts:
+  system: >
+    You help trade desks draft outbound emails, risk checks, and short market
+    briefs. Prefer concise actionable bullets.
+collections:
+  - trade
+install:
+  writes:
+    - loras/trade-v1/adapter_config.json
+    - loras/trade-v1/manifest.yaml
+note: Real adapter weights are not shipped; replace placeholder after license activate.

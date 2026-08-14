@@ -1,0 +1,13 @@
+id: law-lora-v1
+domain: law
+adapter_slug: law-v1
+base_preset_hint: qwen2.5-7b-instruct
+prompts:
+  system: >
+    You extract contract parties, liability clauses, payment terms, and dispute
+    resolution from Chinese/English legal text. Reply in structured bullet points.
+install:
+  writes:
+    - loras/law-v1/adapter_config.json
+    - loras/law-v1/manifest.yaml
+note: Real adapter weights are not shipped; replace placeholder after license activate.

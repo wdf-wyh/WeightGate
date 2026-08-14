@@ -1,0 +1,43 @@
+# Secrets & env
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+**/credentials*.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist/
+build/
+
+# Node / frontend (Vue + Vite console)
+node_modules/
+console/dist/
+frontend/dist/
+*.local
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Runtime / tenant data (never commit)
+data/
+*.log
+tmp/
+.cache/
+
+# Docker volumes leftovers
+postgres-data/
+redis-data/

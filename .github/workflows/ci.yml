@@ -1,0 +1,49 @@
+name: ci
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install lint tools
+        run: pip install -r requirements-dev.txt
+      - name: Ruff syntax / undefined-name gate
+        run: ruff check control-plane gateway scripts packages --select E9,F63,F7,F82
+      - name: Validate JSON schemas parse
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path("schemas/openai")
+          for p in sorted(root.glob("*.json")):
+              json.loads(p.read_text(encoding="utf-8"))
+              print("ok", p)
+          PY
+
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install smoke deps
+        run: pip install -r requirements-dev.txt
+      - name: Compose config
+        run: |
+          docker compose -f compose/docker-compose.yml config >/dev/null
+          docker compose -f compose/docker-compose.yml --profile app config >/dev/null
+          docker compose -f compose/docker-compose.yml --profile ollama config >/dev/null
+          docker compose -f compose/docker-compose.yml --profile app --profile console config >/dev/null
+      - name: Phase 2 smoke
+        run: python scripts/smoke_test.py
+      - name: Phase 2 deep regression
+        run: python scripts/deep_test.py

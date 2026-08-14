@@ -1,0 +1,22 @@
+# Vertical mirror store catalog (Phase 4).
+# Real weights stay outside git; products ship manifests + install playbooks.
+
+version: 1
+products:
+  - id: law-lora-v1
+    display_name: "法律合同抽取 LoRA"
+    domain: law
+    price_cny: 199
+    example_path: examples/law-lora
+    adapter_slug: law-v1
+    base_preset_hint: qwen2.5-7b-instruct
+    description: "Contract clause / liability extraction LoRA pack for one tenant."
+
+  - id: trade-agent-v1
+    display_name: "外贸邮件 Agent 镜像"
+    domain: trade
+    price_cny: 299
+    example_path: examples/trade-agent
+    adapter_slug: trade-v1
+    base_preset_hint: qwen2.5-7b-instruct
+    description: "Trade-desk agent prompts + adapter marker + RAG collection layout."

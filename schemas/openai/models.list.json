@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://automatic-funicular.dev/schemas/openai-models.list.json",
+  "title": "OpenAICompatibleModelListResponse",
+  "description": "GET /v1/models response; Phase 1 returns only models visible to the authenticated tenant.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["object", "data"],
+  "properties": {
+    "object": { "type": "string", "const": "list" },
+    "data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["id", "object", "created", "owned_by"],
+        "properties": {
+          "id": { "type": "string" },
+          "object": { "type": "string", "const": "model" },
+          "created": { "type": "integer" },
+          "owned_by": { "type": "string" }
+        }
+      }
+    }
+  }
+}

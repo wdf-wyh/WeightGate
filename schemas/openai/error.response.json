@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://automatic-funicular.dev/schemas/openai-error.response.json",
+  "title": "OpenAICompatibleErrorResponse",
+  "description": "Error envelope returned by gateway on 4xx/5xx (OpenAI-compatible).",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["error"],
+  "properties": {
+    "error": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["message", "type"],
+      "properties": {
+        "message": { "type": "string" },
+        "type": {
+          "type": "string",
+          "description": "e.g. invalid_request_error, authentication_error, rate_limit_error, server_error"
+        },
+        "param": { "type": ["string", "null"] },
+        "code": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

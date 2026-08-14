@@ -1,0 +1,47 @@
+# Optional Compose fragment: single-GPU vLLM with multi-LoRA for one tenant.
+# Render with Jinja or copy/adapt. Do not commit real weights.
+#
+# Example:
+#   tenant_id=tenant_a
+#   base_model=Qwen/Qwen2.5-7B-Instruct
+#   lora_modules=law-v1=/data/tenants/tenant_a/loras/law-v1,trade-v1=/data/tenants/tenant_a/loras/trade-v1
+#
+# Gateway selects adapter via X-AF-Adapter / body.adapter; cross-tenant → 403.
+
+services:
+  vllm-{{ tenant_id }}:
+    image: "{{ vllm_image | default('vllm/vllm-openai:latest') }}"
+    profiles: ["vllm"]
+    environment:
+      HUGGING_FACE_HUB_TOKEN: "${HF_TOKEN:-}"
+    command:
+      - "--model"
+      - "{{ base_model }}"
+      - "--host"
+      - "0.0.0.0"
+      - "--port"
+      - "{{ port | default('8001') }}"
+      - "--max-model-len"
+      - "{{ max_model_len | default('4096') }}"
+      - "--enable-lora"
+      - "--max-loras"
+      - "{{ max_loras | default('4') }}"
+      - "--max-lora-rank"
+      - "{{ max_lora_rank | default('16') }}"
+      - "--lora-modules"
+      - "{{ lora_modules }}"
+    volumes:
+      # Tenant-scoped only — never mount sibling tenants/
+      - "{{ data_root | default('../data/tenants') }}/{{ tenant_id }}:/data/tenants/{{ tenant_id }}:ro"
+    ports:
+      - "{{ host_port | default('8001') }}:{{ port | default('8001') }}"
+    labels:
+      af.tenant_id: "{{ tenant_id }}"
+      af.plane: "runtime"
+      af.model_preset_id: "{{ model_preset_id | default('small-7b') }}"
+      af.multi_lora: "1"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: ["gpu"]

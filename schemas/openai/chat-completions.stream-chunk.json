@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://automatic-funicular.dev/schemas/openai-chat-completions.stream-chunk.json",
+  "title": "OpenAICompatibleChatCompletionsStreamChunk",
+  "description": "SSE data payload for stream=true (chat.completion.chunk).",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["id", "object", "created", "model", "choices"],
+  "properties": {
+    "id": { "type": "string" },
+    "object": { "type": "string", "const": "chat.completion.chunk" },
+    "created": { "type": "integer" },
+    "model": { "type": "string" },
+    "choices": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["index", "delta"],
+        "additionalProperties": true,
+        "properties": {
+          "index": { "type": "integer", "minimum": 0 },
+          "delta": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "role": { "type": "string" },
+              "content": { "type": ["string", "null"] },
+              "tool_calls": {
+                "type": "array",
+                "items": { "type": "object", "additionalProperties": true }
+              }
+            }
+          },
+          "finish_reason": {
+            "type": ["string", "null"],
+            "enum": ["stop", "length", "tool_calls", "content_filter", null]
+          }
+        }
+      }
+    }
+  }
+}
