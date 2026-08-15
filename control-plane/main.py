@@ -83,7 +83,7 @@ from ssh_driver import (  # noqa: E402
     stop_remote_runtime,
 )
 
-app = FastAPI(title="automatic-funicular control-plane", version="0.4.0")
+app = FastAPI(title="WeightGate control-plane", version="0.4.0")
 
 _cors = os.environ.get("AF_CORS_ORIGINS", "http://127.0.0.1:5173,http://localhost:5173")
 app.add_middleware(

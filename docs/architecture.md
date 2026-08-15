@@ -2,7 +2,7 @@
 
 ## Product
 
-**automatic-funicular** is open-source middleware for hosting small-model weights with hybrid routing and multi-tenant isolation. It is not a flagship self-built cloud and not a China-local Hugging Face clone.
+**WeightGate** is open-source middleware for hosting small-model weights with hybrid routing and multi-tenant isolation. It is not a flagship self-built cloud and not a China-local Hugging Face clone.
 
 ## Planes
 

@@ -1,6 +1,6 @@
 # Deploy on AutoDL (pay-as-you-go GPU) — Phase 3 handbook
 
-Goal: run a **single-GPU vLLM** (optionally multi-LoRA) OpenAI-compatible server without padding balance beyond a short experiment, then point **automatic-funicular** gateway `VLLM_BASE_URL` at it.
+Goal: run a **single-GPU vLLM** (optionally multi-LoRA) OpenAI-compatible server without padding balance beyond a short experiment, then point **WeightGate** gateway `VLLM_BASE_URL` at it.
 
 This project is middleware, not a GPU marketplace. AutoDL (or similar) is an optional **prod** backend next to local Ollama.
 

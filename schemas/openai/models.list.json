@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://automatic-funicular.dev/schemas/openai-models.list.json",
+  "$id": "https://weightgate.dev/schemas/openai-models.list.json",
   "title": "OpenAICompatibleModelListResponse",
   "description": "GET /v1/models response; Phase 1 returns only models visible to the authenticated tenant.",
   "type": "object",

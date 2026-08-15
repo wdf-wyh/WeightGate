@@ -33,7 +33,7 @@ Defaults simulate SSH so local demos stay zero-cost:
 ```bash
 export AF_SSH_DRIVER=on
 export AF_SSH_CONNECT_TIMEOUT=8
-export AF_REMOTE_AGENT_DIR='~/automatic-funicular-agent'
+export AF_REMOTE_AGENT_DIR='~/weightgate-agent'
 ```
 
 Then:

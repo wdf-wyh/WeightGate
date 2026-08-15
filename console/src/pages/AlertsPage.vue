@@ -23,7 +23,7 @@ async function scan() {
   scanInfo.value = "";
   try {
     const r = await api.scanAlerts();
-    scanInfo.value = `created ${r.created}, open ${r.open_total}`;
+    scanInfo.value = `新建 ${r.created}，未关闭 ${r.open_total}`;
     filter.value = "open";
     await refresh();
   } catch (e) {
@@ -48,21 +48,21 @@ onMounted(refresh);
 
 <template>
   <section>
-    <h1>Alerts</h1>
-    <p class="lead">Instance down, RPM near-exhaustion, and disk pressure.</p>
+    <h1>告警</h1>
+    <p class="lead">实例宕机、RPM 将耗尽、磁盘压力。</p>
     <p v-if="error" class="err">{{ error }}</p>
     <p v-if="scanInfo" class="muted">{{ scanInfo }}</p>
 
     <div class="panel">
       <div class="row">
         <select v-model="filter" @change="refresh">
-          <option value="open">open</option>
-          <option value="acked">acked</option>
-          <option value="resolved">resolved</option>
-          <option value="">(all)</option>
+          <option value="open">未关闭</option>
+          <option value="acked">已确认</option>
+          <option value="resolved">已解决</option>
+          <option value="">（全部）</option>
         </select>
-        <button class="primary" :disabled="busy" @click="scan">Scan now</button>
-        <button :disabled="busy" @click="refresh">Refresh</button>
+        <button class="primary" :disabled="busy" @click="scan">立即扫描</button>
+        <button :disabled="busy" @click="refresh">刷新</button>
       </div>
     </div>
 
@@ -70,10 +70,10 @@ onMounted(refresh);
       <table>
         <thead>
           <tr>
-            <th>Severity</th>
-            <th>Kind</th>
-            <th>Tenant</th>
-            <th>Message</th>
+            <th>级别</th>
+            <th>类型</th>
+            <th>租户</th>
+            <th>消息</th>
             <th></th>
           </tr>
         </thead>
@@ -84,13 +84,13 @@ onMounted(refresh);
             <td class="mono">{{ a.tenant_id || "—" }}</td>
             <td>{{ a.message }}</td>
             <td class="row">
-              <button v-if="a.status === 'open'" @click="ack(a.id)">Ack</button>
-              <button v-if="a.status !== 'resolved'" @click="resolve(a.id)">Resolve</button>
+              <button v-if="a.status === 'open'" @click="ack(a.id)">确认</button>
+              <button v-if="a.status !== 'resolved'" @click="resolve(a.id)">解决</button>
             </td>
           </tr>
         </tbody>
       </table>
-      <p v-if="!alerts.length" class="muted">No alerts in this filter.</p>
+      <p v-if="!alerts.length" class="muted">当前筛选条件下无告警。</p>
     </div>
   </section>
 </template>

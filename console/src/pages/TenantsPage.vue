@@ -66,7 +66,7 @@ async function issueKey() {
   error.value = "";
   try {
     const key = await api.issueKey(selected.value);
-    issuedKey.value = key.api_key || "(not returned)";
+    issuedKey.value = key.api_key || "（未返回）";
   } catch (e) {
     error.value = String(e);
   } finally {
@@ -79,17 +79,17 @@ onMounted(refresh);
 
 <template>
   <section>
-    <h1>Tenants</h1>
-    <p class="lead">Manage tenants, route policy, and API key issuance via control-plane only.</p>
+    <h1>租户</h1>
+    <p class="lead">通过控制面管理租户、路由策略与 API Key 签发。</p>
 
     <p v-if="error" class="err">{{ error }}</p>
 
     <div class="panel">
       <div class="row">
-        <input v-model="newId" placeholder="tenant_id" />
-        <input v-model="newName" placeholder="display name" />
+        <input v-model="newId" placeholder="租户 ID" />
+        <input v-model="newName" placeholder="显示名称" />
         <button class="primary" :disabled="busy || !newId || !newName" @click="createTenant">
-          Create
+          创建
         </button>
       </div>
     </div>
@@ -99,9 +99,9 @@ onMounted(refresh);
         <thead>
           <tr>
             <th>ID</th>
-            <th>Name</th>
-            <th>Status</th>
-            <th>Created</th>
+            <th>名称</th>
+            <th>状态</th>
+            <th>创建时间</th>
           </tr>
         </thead>
         <tbody>
@@ -116,25 +116,25 @@ onMounted(refresh);
     </div>
 
     <div class="panel">
-      <h1 style="font-size: 1.05rem">Route policy & keys</h1>
+      <h1 style="font-size: 1.05rem">路由策略与密钥</h1>
       <div class="row">
         <select v-model="selected" @change="loadPolicy">
           <option v-for="t in tenants" :key="t.id" :value="t.id">{{ t.id }}</option>
         </select>
         <select v-model="policyMode">
-          <option value="local_only">local_only</option>
-          <option value="cloud_only">cloud_only</option>
-          <option value="hybrid">hybrid</option>
+          <option value="local_only">仅本地</option>
+          <option value="cloud_only">仅云端</option>
+          <option value="hybrid">混合</option>
         </select>
-        <button class="primary" :disabled="busy || !selected" @click="savePolicy">Save policy</button>
-        <button :disabled="busy || !selected" @click="issueKey">Issue API key</button>
+        <button class="primary" :disabled="busy || !selected" @click="savePolicy">保存策略</button>
+        <button :disabled="busy || !selected" @click="issueKey">签发 API Key</button>
       </div>
       <p v-if="policy" class="muted">
-        Current: <span class="mono">{{ policy.mode }}</span> · short_max_chars
+        当前：<span class="mono">{{ policy.mode }}</span> · short_max_chars
         {{ policy.short_max_chars }}
       </p>
       <p v-if="issuedKey" class="ok">
-        New key (copy once): <span class="mono">{{ issuedKey }}</span>
+        新密钥（请立即复制）：<span class="mono">{{ issuedKey }}</span>
       </p>
     </div>
   </section>

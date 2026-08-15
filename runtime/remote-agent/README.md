@@ -20,6 +20,6 @@ Thin scripts installed on **customer-owned** machines. Control-plane SSHes in
 ## Manual install (no control plane)
 
 ```bash
-scp -r runtime/remote-agent user@customer-host:~/automatic-funicular-agent
-ssh user@customer-host '~/automatic-funicular-agent/install.sh'
+scp -r runtime/remote-agent user@customer-host:~/weightgate-agent
+ssh user@customer-host '~/weightgate-agent/install.sh'
 ```

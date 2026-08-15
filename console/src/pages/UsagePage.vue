@@ -35,8 +35,8 @@ onMounted(bootstrap);
 
 <template>
   <section>
-    <h1>Usage</h1>
-    <p class="lead">Token and route usage recorded by the gateway through control-plane.</p>
+    <h1>用量</h1>
+    <p class="lead">网关经控制面记录的 Token 与路由用量。</p>
     <p v-if="error" class="err">{{ error }}</p>
 
     <div class="panel">
@@ -44,15 +44,15 @@ onMounted(bootstrap);
         <select v-model="tenantId">
           <option v-for="t in tenants" :key="t.id" :value="t.id">{{ t.id }}</option>
         </select>
-        <button @click="load">Refresh</button>
+        <button @click="load">刷新</button>
       </div>
       <p v-if="usage" class="muted">
-        Events: <span class="mono">{{ usage.total_events }}</span> · tokens
+        事件：<span class="mono">{{ usage.total_events }}</span> · Token
         <span class="mono">{{ usage.total_tokens }}</span>
-        (prompt {{ usage.prompt_tokens }} / completion {{ usage.completion_tokens }})
+        （提示 {{ usage.prompt_tokens }} / 补全 {{ usage.completion_tokens }}）
       </p>
       <p v-if="usage" class="muted">
-        By route:
+        按路由：
         <span v-for="(n, route) in usage.by_route" :key="route" class="badge" style="margin-right: 0.35rem">
           {{ route }}: {{ n }}
         </span>
@@ -64,11 +64,11 @@ onMounted(bootstrap);
       <table>
         <thead>
           <tr>
-            <th>When</th>
-            <th>Model</th>
-            <th>Route</th>
-            <th>Tokens</th>
-            <th>Latency</th>
+            <th>时间</th>
+            <th>模型</th>
+            <th>路由</th>
+            <th>Token</th>
+            <th>延迟</th>
           </tr>
         </thead>
         <tbody>
@@ -81,7 +81,7 @@ onMounted(bootstrap);
           </tr>
         </tbody>
       </table>
-      <p v-if="usage && !usage.events.length" class="muted">No usage events yet.</p>
+      <p v-if="usage && !usage.events.length" class="muted">暂无用量事件。</p>
     </div>
   </section>
 </template>

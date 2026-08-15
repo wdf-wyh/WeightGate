@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://automatic-funicular.dev/schemas/openai-error.response.json",
+  "$id": "https://weightgate.dev/schemas/openai-error.response.json",
   "title": "OpenAICompatibleErrorResponse",
   "description": "Error envelope returned by gateway on 4xx/5xx (OpenAI-compatible).",
   "type": "object",

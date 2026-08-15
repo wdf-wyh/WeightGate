@@ -59,6 +59,7 @@ pip-wheel-metadata/
 
 # Node / frontend (Vue + Vite console)
 node_modules/
+.npm-cache/
 console/dist/
 frontend/dist/
 *.local

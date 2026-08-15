@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://automatic-funicular.dev/schemas/openai-chat-completions.stream-chunk.json",
+  "$id": "https://weightgate.dev/schemas/openai-chat-completions.stream-chunk.json",
   "title": "OpenAICompatibleChatCompletionsStreamChunk",
   "description": "SSE data payload for stream=true (chat.completion.chunk).",
   "type": "object",

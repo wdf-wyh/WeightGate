@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://automatic-funicular.dev/schemas/openai-chat-completions.request.json",
+  "$id": "https://weightgate.dev/schemas/openai-chat-completions.request.json",
   "title": "OpenAICompatibleChatCompletionsRequest",
   "description": "Gateway /v1/chat/completions request body (OpenAI-compatible subset). Phase 0 contract only.",
   "type": "object",

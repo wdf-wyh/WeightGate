@@ -1,4 +1,4 @@
-# automatic-funicular — local compose (Phase 3)
+# WeightGate — local compose (Phase 3)
 #
 # Profiles:
 #   (default)     postgres + redis
@@ -12,7 +12,7 @@
 #   docker compose -f compose/docker-compose.yml --profile app --profile ollama up -d --build
 #   docker compose -f compose/docker-compose.yml --profile console up -d --build
 
-name: automatic-funicular
+name: weightgate
 
 services:
   postgres:
@@ -20,13 +20,13 @@ services:
     environment:
       POSTGRES_USER: af
       POSTGRES_PASSWORD: af_dev_only
-      POSTGRES_DB: automatic_funicular
+      POSTGRES_DB: weightgate
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U af -d automatic_funicular"]
+      test: ["CMD-SHELL", "pg_isready -U af -d weightgate"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -46,13 +46,13 @@ services:
     restart: unless-stopped
 
   control-plane:
-    image: automatic-funicular/control-plane:phase3
+    image: weightgate/control-plane:phase3
     build:
       context: ..
       dockerfile: control-plane/Dockerfile
     profiles: ["app"]
     environment:
-      DATABASE_URL: postgresql://af:af_dev_only@postgres:5432/automatic_funicular
+      DATABASE_URL: postgresql://af:af_dev_only@postgres:5432/weightgate
       REDIS_URL: redis://redis:6379/0
       AF_DATA_ROOT: /data/tenants
       AF_PORT: "8080"
@@ -77,13 +77,13 @@ services:
     restart: unless-stopped
 
   gateway:
-    image: automatic-funicular/gateway:phase3
+    image: weightgate/gateway:phase3
     build:
       context: ..
       dockerfile: gateway/Dockerfile
     profiles: ["app"]
     environment:
-      DATABASE_URL: postgresql://af:af_dev_only@postgres:5432/automatic_funicular
+      DATABASE_URL: postgresql://af:af_dev_only@postgres:5432/weightgate
       REDIS_URL: redis://redis:6379/0
       CONTROL_PLANE_URL: http://control-plane:8080
       AF_DATA_ROOT: /data/tenants
@@ -121,7 +121,7 @@ services:
     restart: unless-stopped
 
   console:
-    image: automatic-funicular/console:phase3
+    image: weightgate/console:phase3
     build:
       context: ../console
       dockerfile: Dockerfile

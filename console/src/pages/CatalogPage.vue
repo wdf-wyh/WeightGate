@@ -56,10 +56,10 @@ onMounted(refresh);
 
 <template>
   <section>
-    <h1>Mirror catalog</h1>
-    <p class="lead">Vertical packs (law / trade). Issue a license, then activate to install a tenant marker.</p>
+    <h1>镜像目录</h1>
+    <p class="lead">垂直行业包（法律 / 贸易）。签发许可证后激活，即可安装租户标记。</p>
     <p v-if="error" class="err">{{ error }}</p>
-    <p v-if="lastKey" class="mono">Issued key (copy once): {{ lastKey }}</p>
+    <p v-if="lastKey" class="mono">已签发密钥（请立即复制）：{{ lastKey }}</p>
 
     <div class="panel">
       <div class="row">
@@ -70,9 +70,9 @@ onMounted(refresh);
       <table>
         <thead>
           <tr>
-            <th>Product</th>
-            <th>Domain</th>
-            <th>Price</th>
+            <th>产品</th>
+            <th>领域</th>
+            <th>价格</th>
             <th></th>
           </tr>
         </thead>
@@ -86,7 +86,7 @@ onMounted(refresh);
             <td>¥{{ p.price_cny }}</td>
             <td>
               <button class="primary" :disabled="busy || !tenantId" @click="issue(p.id)">
-                Issue license
+                签发许可证
               </button>
             </td>
           </tr>
@@ -95,22 +95,22 @@ onMounted(refresh);
     </div>
 
     <div class="panel">
-      <h2>Activate</h2>
+      <h2>激活</h2>
       <div class="row">
         <input v-model="activateKey" placeholder="lic-af-…" style="min-width: 22rem" />
-        <button :disabled="busy || !activateKey" @click="activate">Activate → install marker</button>
+        <button :disabled="busy || !activateKey" @click="activate">激活 → 安装标记</button>
       </div>
     </div>
 
     <div class="panel">
-      <h2>Licenses for {{ tenantId || "—" }}</h2>
+      <h2>{{ tenantId || "—" }} 的许可证</h2>
       <table>
         <thead>
           <tr>
-            <th>Product</th>
-            <th>Prefix</th>
-            <th>Status</th>
-            <th>Activated</th>
+            <th>产品</th>
+            <th>前缀</th>
+            <th>状态</th>
+            <th>激活时间</th>
           </tr>
         </thead>
         <tbody>

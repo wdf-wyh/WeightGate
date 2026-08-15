@@ -53,7 +53,7 @@ import vllm_proxy  # noqa: E402
 forward_models = ollama_proxy.forward_models
 forward_chat_completions = ollama_proxy.forward_chat_completions
 
-app = FastAPI(title="automatic-funicular gateway", version="0.4.0")
+app = FastAPI(title="WeightGate gateway", version="0.4.0")
 
 
 class VectorUpsertBody(BaseModel):

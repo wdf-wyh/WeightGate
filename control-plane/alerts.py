@@ -176,7 +176,7 @@ def post_webhook(drafts: list[AlertDraft]) -> None:
         httpx.post(
             url,
             json={
-                "source": "automatic-funicular",
+                "source": "weightgate",
                 "alerts": [
                     {
                         "kind": d.kind,

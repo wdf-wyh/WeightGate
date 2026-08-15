@@ -72,24 +72,23 @@ onMounted(refresh);
 
 <template>
   <section>
-    <h1>Hosts</h1>
+    <h1>主机</h1>
     <p class="lead">
-      Customer-owned SSH targets. Default driver is simulated (`AF_SSH_DRIVER=off`) so you never
-      pad GPU cost.
+      客户自有 SSH 目标。默认驱动为模拟（`AF_SSH_DRIVER=off`），避免产生 GPU 费用。
     </p>
     <p v-if="error" class="err">{{ error }}</p>
 
     <div class="panel">
       <div class="row wrap">
-        <input v-model="name" placeholder="name" />
-        <input v-model="sshHost" placeholder="ssh host" />
-        <input v-model.number="sshPort" type="number" placeholder="port" />
-        <input v-model="sshUser" placeholder="user" />
+        <input v-model="name" placeholder="名称" />
+        <input v-model="sshHost" placeholder="SSH 主机" />
+        <input v-model.number="sshPort" type="number" placeholder="端口" />
+        <input v-model="sshUser" placeholder="用户" />
         <select v-model="tenantId">
-          <option value="">(any tenant)</option>
+          <option value="">（任意租户）</option>
           <option v-for="t in tenants" :key="t.id" :value="t.id">{{ t.id }}</option>
         </select>
-        <button class="primary" :disabled="busy" @click="create">Add host</button>
+        <button class="primary" :disabled="busy" @click="create">添加主机</button>
       </div>
     </div>
 
@@ -97,10 +96,10 @@ onMounted(refresh);
       <table>
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Endpoint</th>
-            <th>Status</th>
-            <th>Note</th>
+            <th>名称</th>
+            <th>端点</th>
+            <th>状态</th>
+            <th>备注</th>
             <th></th>
           </tr>
         </thead>
@@ -111,13 +110,13 @@ onMounted(refresh);
             <td>{{ h.status }}</td>
             <td class="muted">{{ h.note || "—" }}</td>
             <td class="row">
-              <button :disabled="busy" @click="probe(h.id)">Probe</button>
-              <button :disabled="busy" @click="install(h.id)">Install agent</button>
+              <button :disabled="busy" @click="probe(h.id)">探测</button>
+              <button :disabled="busy" @click="install(h.id)">安装 Agent</button>
             </td>
           </tr>
         </tbody>
       </table>
-      <p v-if="!hosts.length" class="muted">No hosts yet.</p>
+      <p v-if="!hosts.length" class="muted">暂无主机。</p>
     </div>
   </section>
 </template>

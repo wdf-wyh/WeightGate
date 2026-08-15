@@ -13,7 +13,7 @@ class ModelObject(BaseModel):
     id: str
     object: Literal["model"] = "model"
     created: int
-    owned_by: str = "automatic-funicular"
+    owned_by: str = "weightgate"
 
 
 class ModelListResponse(BaseModel):

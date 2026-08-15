@@ -1,6 +1,6 @@
-# automatic-funicular — Phase 2 tooling
+# WeightGate — Phase 2 tooling
 [project]
-name = "automatic-funicular"
+name = "weightgate"
 version = "0.2.0"
 description = "Open-source small-model weight hosting middleware (Phase 2)"
 readme = "README.md"

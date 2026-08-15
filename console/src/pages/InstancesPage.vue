@@ -82,9 +82,9 @@ onMounted(bootstrap);
 
 <template>
   <section>
-    <h1>Instances</h1>
+    <h1>实例</h1>
     <p class="lead">
-      Start / stop / wake tenant runtimes via control-plane (local Docker or remote SSH host).
+      通过控制面启动 / 停止 / 唤醒租户运行时（本地 Docker 或远程 SSH 主机）。
     </p>
     <p v-if="error" class="err">{{ error }}</p>
 
@@ -99,15 +99,15 @@ onMounted(bootstrap);
           </option>
         </select>
         <select v-model="hostId">
-          <option value="">local docker</option>
+          <option value="">本地 Docker</option>
           <option v-for="h in hosts" :key="h.id" :value="h.id">
             {{ h.name }} ({{ h.ssh_host }})
           </option>
         </select>
         <button class="primary" :disabled="busy || !tenantId || !presetId" @click="create">
-          Create / start
+          创建 / 启动
         </button>
-        <button :disabled="busy || !tenantId" @click="refreshInstances">Refresh</button>
+        <button :disabled="busy || !tenantId" @click="refreshInstances">刷新</button>
       </div>
     </div>
 
@@ -116,11 +116,11 @@ onMounted(bootstrap);
         <thead>
           <tr>
             <th>ID</th>
-            <th>Preset</th>
-            <th>Backend</th>
-            <th>Host</th>
-            <th>Status</th>
-            <th>Note</th>
+            <th>预设</th>
+            <th>后端</th>
+            <th>主机</th>
+            <th>状态</th>
+            <th>备注</th>
             <th></th>
           </tr>
         </thead>
@@ -129,19 +129,19 @@ onMounted(bootstrap);
             <td class="mono">{{ i.id }}</td>
             <td class="mono">{{ i.preset_id }}</td>
             <td><span class="badge">{{ i.backend }}</span></td>
-            <td class="mono">{{ i.host_id || "local" }}</td>
+            <td class="mono">{{ i.host_id || "本地" }}</td>
             <td><span class="badge">{{ i.status }}</span></td>
             <td class="muted">{{ i.note || "—" }}</td>
             <td>
               <div class="row" style="margin: 0">
-                <button :disabled="busy" @click="stop(i.id)">Stop</button>
-                <button :disabled="busy" @click="wake(i.id)">Wake</button>
+                <button :disabled="busy" @click="stop(i.id)">停止</button>
+                <button :disabled="busy" @click="wake(i.id)">唤醒</button>
               </div>
             </td>
           </tr>
         </tbody>
       </table>
-      <p v-if="!instances.length" class="muted">No instances for this tenant.</p>
+      <p v-if="!instances.length" class="muted">该租户暂无实例。</p>
     </div>
   </section>
 </template>

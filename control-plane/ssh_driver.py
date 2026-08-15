@@ -79,7 +79,7 @@ def remote_run(ep: HostEndpoint, remote_command: str, timeout: int = 120) -> tup
 
 def install_remote_agent(ep: HostEndpoint, *, remote_dir: str | None = None) -> tuple[str, str]:
     """Copy remote-agent scripts and run healthcheck on the customer host."""
-    target = remote_dir or os.environ.get("AF_REMOTE_AGENT_DIR", "~/automatic-funicular-agent")
+    target = remote_dir or os.environ.get("AF_REMOTE_AGENT_DIR", "~/weightgate-agent")
     if not _ssh_enabled():
         return (
             "installed",
@@ -141,7 +141,7 @@ def start_remote_runtime(
             f"simulated remote {backend} on {ep.user}@{ep.host} "
             f"(tenant={tenant_id} inst={instance_id} preset={preset_id})",
         )
-    target = os.environ.get("AF_REMOTE_AGENT_DIR", "~/automatic-funicular-agent")
+    target = os.environ.get("AF_REMOTE_AGENT_DIR", "~/weightgate-agent")
     cmd = (
         f"{target}/start_runtime.sh "
         f"--tenant {tenant_id} --instance {instance_id} "
@@ -156,7 +156,7 @@ def start_remote_runtime(
 def stop_remote_runtime(ep: HostEndpoint, *, instance_id: str) -> tuple[str, str]:
     if not _ssh_enabled():
         return "stopped", f"simulated remote stop {instance_id} on {ep.host}"
-    target = os.environ.get("AF_REMOTE_AGENT_DIR", "~/automatic-funicular-agent")
+    target = os.environ.get("AF_REMOTE_AGENT_DIR", "~/weightgate-agent")
     code, out, err = remote_run(
         ep,
         f"{target}/start_runtime.sh --stop --instance {instance_id}",
